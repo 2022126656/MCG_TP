@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Game (venv)",
+            "type": "python",
+            "request": "launch",
+            "module": "src.game",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "python": "${config:python.defaultInterpreterPath}"
+        }
+    ]
+}
