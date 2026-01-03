@@ -15,7 +15,7 @@ class LeaderboardScreen:
 		center_x = self.width // 2
 		self.back_button = MenuButton(
 			pygame.Rect(center_x - button_width // 2, self.height - 100, button_width, button_height),
-			"Main Menu",
+			"Back",
 			self.font,
 			base_color=configs.MAGENTA,
 			text_color=configs.WHITE,
@@ -66,8 +66,3 @@ class LeaderboardScreen:
 			if event.key == pygame.K_m:
 				return "menu"
 		return None
-def display_leaderboard():
-	print("Displaying leaderboard...")
-
-def update_leaderboard():
-	print("Updating leaderboard...")

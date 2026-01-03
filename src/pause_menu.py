@@ -55,13 +55,4 @@ class PauseMenu:
 		self.screen.blit(title_surface, title_rect)
 		for button in self.buttons:
 			button.draw(self.screen, mouse_pos)
-# This is the content of the pause_menu.py file
-# Add your imports here
 
-def pause_game():
-	"""Pause the game."""
-	print("Game paused.")
-
-def resume_game():
-	"""Resume the game."""
-	print("Game resumed.")

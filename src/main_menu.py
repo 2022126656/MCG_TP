@@ -3,7 +3,6 @@ from . import configs
 
 
 
-# --- MenuButton class ---
 class MenuButton:
     def __init__(
         self,
@@ -37,7 +36,6 @@ class MenuButton:
         text_rect = text_surface.get_rect(center=self.rect.center)
         surface.blit(text_surface, text_rect)
 
-# --- MainMenu class ---
 class MainMenu:
     def __init__(self, screen: pygame.Surface):
         self.screen = screen

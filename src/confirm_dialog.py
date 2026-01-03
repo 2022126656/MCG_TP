@@ -1,6 +1,5 @@
 import pygame
 from . import configs
-
 class ConfirmDialog:
 	def __init__(self, screen, message):
 		self.screen = screen

@@ -1,18 +1,14 @@
-
 import pygame
 
 FONT_MEDIUM = None
 TITLE_FONT = None
 
 def init_fonts():
-	"""Inicializa o subsistema de fonts (se necessário) e cria objetos Font."""
-	if not pygame.font.get_init():
-		pygame.font.init()
-	global FONT_MEDIUM, TITLE_FONT
-	FONT_MEDIUM = pygame.font.SysFont("arial", 36)
-	TITLE_FONT = pygame.font.SysFont("arial", 72, bold=True)
-
-
+    if not pygame.font.get_init():
+        pygame.font.init()
+    global FONT_MEDIUM, TITLE_FONT
+    FONT_MEDIUM = pygame.font.SysFont("arial", 36)
+    TITLE_FONT = pygame.font.SysFont("arial", 72, bold=True)
 
 WHITE       = (255, 255, 255)
 BLACK       = (0, 0, 0)

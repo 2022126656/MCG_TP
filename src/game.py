@@ -1,3 +1,4 @@
+
 import pygame
 
 from . import configs
@@ -10,6 +11,7 @@ from .leaderboard_screen import LeaderboardScreen
 def main():
 	pygame.init()
 	configs.init_fonts()
+	pygame.mixer.init()
 	screen = pygame.display.set_mode((960, 600))
 	pygame.display.set_caption("Super Snake")
 	clock = pygame.time.Clock()
@@ -18,7 +20,29 @@ def main():
 	pause_menu = PauseMenu(screen)
 	current_state = "menu"
 	running = True
+
+	def play_music(track):
+		pygame.mixer.music.stop()
+		pygame.mixer.music.load(track)
+		pygame.mixer.music.play(-1)
+
+	play_music("music/main_theme.mp3")
+
+	last_state = "menu"
 	while running:
+		if current_state != last_state:
+			if current_state == "menu":
+				play_music("music/main_theme.mp3")
+			elif current_state == "arena":
+				pass
+			elif current_state == "pause":
+				play_music("music/pause_theme.mp3")
+			elif current_state == "leaderboard":
+				play_music("music/leaderboard_theme.mp3")
+			elif current_state == "game_over":
+				play_music("music/game_over_theme.mp3")
+			last_state = current_state
+
 		if current_state == "menu":
 			confirm_dialog = None
 			show_leaderboard = False
@@ -29,9 +53,14 @@ def main():
 						running = False
 						break
 					if show_leaderboard:
+						if last_state != "leaderboard":
+							play_music("music/leaderboard_theme.mp3")
+							last_state = "leaderboard"
 						action = leaderboard_screen.handle_event(event)
 						if action == "menu":
 							show_leaderboard = False
+							play_music("music/main_theme.mp3")
+							last_state = "menu"
 						continue
 					if confirm_dialog:
 						result = confirm_dialog.handle_event(event)
@@ -44,9 +73,13 @@ def main():
 					action = menu.handle_event(event)
 					if action == "play":
 						current_state = "arena"
+						play_music("music/main_theme.mp3")
+						last_state = "arena"
 					elif action == "leaderboard":
 						leaderboard_screen = LeaderboardScreen(screen)
 						show_leaderboard = True
+						play_music("music/leaderboard_theme.mp3")
+						last_state = "leaderboard"
 					elif action == "quit":
 						confirm_dialog = ConfirmDialog(screen, "Quit the game?")
 				if show_leaderboard:
@@ -58,15 +91,21 @@ def main():
 				pygame.display.flip()
 				clock.tick(60)
 		elif current_state == "arena":
+			play_music("music/main_theme.mp3")
+			last_state = "arena"
 			result = arena.run()
 			if result == "menu":
 				current_state = "menu"
+				play_music("music/main_theme.mp3")
+				last_state = "menu"
 			elif result == "quit":
 				running = False
 			elif result == "pause":
 				paused = True
 				confirm_dialog = None
 				confirm_action = None
+				play_music("music/pause_theme.mp3")
+				last_state = "pause"
 				while paused and running:
 					for event in pygame.event.get():
 						if event.type == pygame.QUIT:
@@ -126,6 +165,10 @@ def main():
 						confirm_dialog.draw()
 					pygame.display.flip()
 					clock.tick(60)
+				if running and not paused:
+					play_music("music/main_theme.mp3")
+					last_state = "arena"
+	pygame.mixer.music.stop()
 	pygame.quit()
 
 if __name__ == "__main__":

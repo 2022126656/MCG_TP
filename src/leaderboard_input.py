@@ -61,14 +61,3 @@ class LeaderboardInput:
 				elif len(self.text) < 16 and event.unicode.isprintable():
 					self.text += event.unicode
 		return None
-# Original content of leaderboard_input.py
-# This is a placeholder for the actual content of the file.
-# Please replace this with the actual lines from the original file.
-# For example:
-# def some_function():
-#     pass
-# 
-# if __name__ == "__main__":
-#     some_function()
-# 
-# Additional content goes here...

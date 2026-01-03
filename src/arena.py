@@ -6,6 +6,13 @@ from .confirm_dialog import ConfirmDialog
 from .leaderboard_input import LeaderboardInput
 
 class SnakeArena:
+	def play_music(self, track):
+		try:
+			pygame.mixer.music.stop()
+			pygame.mixer.music.load(track)
+			pygame.mixer.music.play(-1)
+		except Exception:
+			pass
 	def __init__(self, screen, cols=16, rows=16, cell=30):
 		self.screen = screen
 		self.screen_width, self.screen_height = screen.get_size()
@@ -114,7 +121,6 @@ class SnakeArena:
 		leaderboard_saved = False
 		while running:
 			if not game_over_screen:
-				# Process all events, but only use the last direction key pressed per frame
 				last_direction = None
 				for event in pygame.event.get():
 					if event.type == pygame.QUIT:
@@ -130,13 +136,11 @@ class SnakeArena:
 							last_direction = pygame.Vector2(-1, 0)
 						elif event.key == pygame.K_RIGHT and self.direction.x == 0:
 							last_direction = pygame.Vector2(1, 0)
-				# Only update direction once per frame, using the last valid key
 				if last_direction is not None:
 					self.direction = last_direction
 				collision = self.move_snake()
 				if collision:
 					game_over_screen = GameOverScreen(self.screen, self.score)
-					# Dedicated blocking loop for game over screen
 					leaderboard_input = None
 					leaderboard_saved = False
 					while True:
@@ -162,7 +166,24 @@ class SnakeArena:
 								break
 							elif action == "menu":
 								return "menu"
+							elif action == "leaderboard":
+								from .leaderboard_screen import LeaderboardScreen
+								leaderboard_screen = LeaderboardScreen(self.screen)
+								self.play_music("music/leaderboard_theme.mp3")
+								viewing = True
+								while viewing:
+									for lbevent in pygame.event.get():
+										if lbevent.type == pygame.QUIT:
+											return "quit"
+										lbaction = leaderboard_screen.handle_event(lbevent)
+										if lbaction == "menu":
+											viewing = False
+											self.play_music("music/game_over_theme.mp3")
+									leaderboard_screen.draw()
+									pygame.display.flip()
+									clock.tick(24)
 							elif action == "add_leaderboard" and not leaderboard_input and not leaderboard_saved:
+								self.play_music("music/leaderboard_theme.mp3")
 								leaderboard_input = LeaderboardInput(self.screen, self.score)
 						if game_over_screen is None:
 							break
@@ -174,10 +195,8 @@ class SnakeArena:
 					continue
 				self.draw()
 				pygame.display.flip()
-				# Dynamic speed: start slow, get faster with score
 				min_fps = 10
 				max_fps = 24
-				# Increase FPS by 1 every 50 points
 				dynamic_fps = min(max_fps, min_fps + self.score // 50)
 				clock.tick(dynamic_fps)
 			else:
@@ -222,6 +241,7 @@ class SnakeArena:
 						confirm_dialog = ConfirmDialog(self.screen, "Return to main menu?")
 						confirm_action = "menu"
 					elif action == "add_leaderboard" and not leaderboard_input and not leaderboard_saved:
+						self.play_music("music/leaderboard_theme.mp3")
 						leaderboard_input = LeaderboardInput(self.screen, self.score)
 				if skip_frame or game_over_screen is None:
 					continue
