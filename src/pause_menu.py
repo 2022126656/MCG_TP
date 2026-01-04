@@ -55,4 +55,3 @@ class PauseMenu:
 		self.screen.blit(title_surface, title_rect)
 		for button in self.buttons:
 			button.draw(self.screen, mouse_pos)
-

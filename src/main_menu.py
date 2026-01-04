@@ -1,8 +1,6 @@
 import pygame
 from . import configs
 
-
-
 class MenuButton:
     def __init__(
         self,
